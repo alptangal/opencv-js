@@ -297,7 +297,7 @@
     // https://emscripten.org/docs/api_reference/module.html#Module.onRuntimeInitialized
     onRuntimeInitialized() {
       document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
-      detector = new cv.barcode_BarcodeDetector();
+      detector = new cv.barcode_BarcodeDetector('sr.prototxt','sr.caffemodel');
     }
   };
 </script>
