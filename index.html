@@ -112,6 +112,7 @@
   function decodeWithOpenCV(imageSource) {
     detector = new cv.barcode_BarcodeDetector('sr.prototxt','sr.caffemodel');
     let results = [];
+    console.log(imageSource)
     let mat = cv.imread(imageSource);
     let points = new cv.Mat();
     detector.detect(mat,points);
