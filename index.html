@@ -35,7 +35,7 @@ imgElement.onload = function() {
             const points = new cv.Mat();
             const straightQrCode = new cv.MatVector();
             const success = qcd.detectAndDecodeMulti(mat, decodedInfo, points, straightQrCode);
-            console.log(success)
+            //console.log(success)
             if (success) {
                 for (let i = 0; i < decodedInfo.size(); i++) {
                     const s = decodedInfo.get(i);
