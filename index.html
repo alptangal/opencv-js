@@ -9,14 +9,16 @@
 <p id="status">OpenCV.js is loading...</p>
 <div>
  <div class="inputoutput">
- <img id="imageSrc" alt="No Image" />
+ <img id="imageSrc" alt="No Image"/>
  <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
  </div>
  <div class="inputoutput">
- <canvas id="canvasOutput" ></canvas>
+ <canvas id="canvasOutput" width="200"></canvas>
  <div class="caption">canvasOutput</div>
+ 
  </div>
 </div>
+<h1></h1>
 <script type="text/javascript">
 let imgElement = document.getElementById('imageSrc');
 let inputElement = document.getElementById('fileInput');
@@ -28,8 +30,8 @@ inputElement.addEventListener('change', (e) => {
  
 imgElement.onload = function() {
     detector = new cv.barcode_BarcodeDetector();
- let mat = cv.imread(imgElement);
-
+    let mat = cv.imread(imgElement);
+    console.log(mat)
     const qcd = new cv.barcode_BarcodeDetector();
             const decodedInfo = new cv.StringVector();
             const points = new cv.Mat();
@@ -41,7 +43,8 @@ imgElement.onload = function() {
                     const s = decodedInfo.get(i);
                     const p = points.row(i).data32F;
                     const pointMatVector = new cv.MatVector();
-                    console.log(s,p)
+                    console.log(s)
+                    document.getElementsByTagName('h1')[0].textContent+=s
                 }
 
             }
