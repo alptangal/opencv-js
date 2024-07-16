@@ -72,27 +72,8 @@ function detect(source) {
     return detector
         .detect(source)
         .then(symbols => {
-          el.result.innerText=symbols
-            canvas.width = source.naturalWidth || source.videoWidth || source.width
-            canvas.height = source.naturalHeight || source.videoHeight || source.height
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-            symbols.forEach(symbol => {
-                const lastCornerPoint = symbol.cornerPoints[symbol.cornerPoints.length - 1]
-                ctx.moveTo(lastCornerPoint.x, lastCornerPoint.y)
-                symbol.cornerPoints.forEach(point => ctx.lineTo(point.x, point.y))
-
-                ctx.lineWidth = 3
-                ctx.strokeStyle = '#00e000ff'
-                ctx.stroke()
-            })
-
-            if (!el.details.checked) {
-                symbols.forEach(symbol => {
-                    delete symbol.boundingBox
-                    delete symbol.cornerPoints
-                })
-            }
+          el.result.innerText=JSON.stringify(symbols)
+            
             //el.result.innerText = JSON.stringify(symbols, null, 2)
         })
 }
