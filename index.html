@@ -4,6 +4,7 @@
 <body>
   <h1>hello world</h1>
   <p id="result1"></p>
+  <p id="result"></p>
   <img style="display:none;" id="img" crossorigin="anonymous"
     src="https://raw.githubusercontent.com/undecaf/zbar-wasm/master/tests/img/qr_code.png">
   <video playsinline autoplay></video>
@@ -12,6 +13,7 @@
   <script type="module">
     import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@latest/dist/main.js";
     let result1 = document.getElementById('result1')
+    let result = document.getElementById('result')
     let canvas = document.createElement('canvas')
     let ctx = canvas.getContext('2d')
     let video = document.querySelector("video")
@@ -53,9 +55,9 @@
         result1.innerText = Date.now()
         
         dectectVideo(video).then(rs=>{
+
           requestId = requestAnimationFrame(() => detector(true))
-          const nw=document.createElement('h2')
-          nw.innerText='hello world '+Date.now()
+          
         }).catch(error=>{result1.innerHTML=error})
 
       } else {
