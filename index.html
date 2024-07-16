@@ -22,7 +22,7 @@
       supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
       detect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
     }
-    function dectectVideo(){
+    function dectectVideo(source){
       return detect
         .detect(source)
         .then(symbols => {
