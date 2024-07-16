@@ -51,6 +51,8 @@ function detector(repeat){
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
           detector(true)
+        }).catch(error=>{
+          result1.innerText=JSON.stringify(error)
         })
 
       })()
