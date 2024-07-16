@@ -13,7 +13,7 @@
   <script type="module">
     let result1=document.getElementById('result1')
 function detector(repeat){
-  result1.innerText(repeat)
+  result1.innerText(str(repeat))
   if (!repeat) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
     }
@@ -66,7 +66,6 @@ function detector(repeat){
 
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
-          result1.innerText='hello world'
           detector()
         })
 
