@@ -22,6 +22,13 @@
       supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
       detect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
     }
+    function dectectVideo(){
+      return detector
+        .detect(source)
+        .then(symbols => {
+          result1.innerHTML=symbols
+        })
+    }
     createDetector()
     const constraints = {
       audio: false,
@@ -42,12 +49,10 @@
 
       if (repeat) {
         result1.innerText = Date.now()
-        detect.detect(video).then(rs=>{
-          result1.innerHTML=rs
-        }).catch(error=>{
-          result1.innerHTML=error
+        
+        dectectVideo(video).then(rs=>{
+          requestId = requestAnimationFrame(() => detectVideo(true))
         })
-        requestId = requestAnimationFrame(detector(true))
 
       } else {
         cancelAnimationFrame(requestId)
