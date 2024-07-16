@@ -53,11 +53,7 @@
       if (repeat) {
         result1.innerText = Date.now()
         
-        dectectVideo(video).then(rs=>{
-          //result.innerHTML='3333333'
-          requestId = requestAnimationFrame(() => detector(true))
-          
-        }).catch(error=>{result.innerHTML=error})
+        dectectVideo(video).then(() => requestId = requestAnimationFrame(() => detector(true))).catch(error=>{result.innerHTML=error})
 
       } else {
         cancelAnimationFrame(requestId)
