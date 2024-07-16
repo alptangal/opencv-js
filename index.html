@@ -2,104 +2,189 @@
 <html>
 
 <body>
-  <h1>hello world</h1>
-  <p id="result1"></p>
-  <img style="display:none;" id="img" crossorigin="anonymous"
-    src="https://raw.githubusercontent.com/undecaf/zbar-wasm/master/tests/img/qr_code.png">
-  <video playsinline autoplay></video>
-
-  <pre id="result"></pre>
-  <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.11.0/dist/index.js"></script>
+  <div class="container">
+    <h4><code>BarcodeDetector</code> polyfill example</h4>
+    
+    <p>See <a href="https://codepen.io/undecaf/pen/ZEXmqdB" target="_blank">here for a demo</a> of the underlying WebAssembly build of the <a href="https://github.com/mchehab/zbar#readme" target="_blank">ZBar Bar Code Reader</a></p>
+    
+    <div>Supported formats: <pre id="formats"></pre></p>
+  
+    <h5>Image source</h5>
+  
+    <input id="fileInput" type="file" style="display: none;" accept="image/*">
+  
+    <input id="imgUrl" type="url" placeholder="Paste an image URL then click outside" required>
+    <button id="imgBtn">Image file</button>
+    <button id="videoBtn">Camera</button>
+  
+    <select id="encoding">
+      <option value="utf-8" selected>UTF-8</option>
+      <option value="iso-8859-15">ISO-8859-15</option>
+      <option value="windows-1252">Windows-1252</option>
+      <option value="macintosh">Macintosh</option>
+    </select>
+  
+    <label>
+      <input id="details" type="checkbox">
+      <span class="label-body">Show details</span>
+    </label>
+  
+    <div class="viewport">
+      <canvas id="canvas"></canvas>
+      <img id="img" crossorigin="anonymous">
+      <video id="video" muted autoplay playsinline></video>
+    </div>
+  
+    <p id="note">If the image does not appear then loading may have been blocked by the server's CORS policy.</p>
+  
+    <h5>Result</h5>
+  
+    <pre id="result"></pre>
+  </div>
+  
   <script type="module">
-    import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@latest/dist/main.js";
-    let result1 = document.getElementById('result1')
-    let canvas = document.createElement('canvas')
-    let ctx = canvas.getContext('2d')
-    let video = document.querySelector("video")
-    let requestId = null
-    let detect = null
-    async function createDetector() {
-      supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
-      detect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
-    }
-    function dectectVideo(){
-      return detect
+import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@latest/dist/main.js";
+
+const el = {}
+
+document
+    .querySelectorAll('[id]')
+    .forEach(element => el[element.id] = element)
+
+const
+    canvas = el.canvas,
+    ctx = canvas.getContext('2d');
+
+let
+    supportedFormats,
+    detector,
+    requestId = null;
+
+
+async function createDetector() {
+    supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
+    el.formats.innerHTML = supportedFormats.join(', ')
+    detector = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: el.encoding.value } })
+}
+
+
+function detect(source) {
+    return detector
         .detect(source)
         .then(symbols => {
-          result1.innerHTML=symbols
+            canvas.width = source.naturalWidth || source.videoWidth || source.width
+            canvas.height = source.naturalHeight || source.videoHeight || source.height
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+            symbols.forEach(symbol => {
+                const lastCornerPoint = symbol.cornerPoints[symbol.cornerPoints.length - 1]
+                ctx.moveTo(lastCornerPoint.x, lastCornerPoint.y)
+                symbol.cornerPoints.forEach(point => ctx.lineTo(point.x, point.y))
+
+                ctx.lineWidth = 3
+                ctx.strokeStyle = '#00e000ff'
+                ctx.stroke()
+            })
+
+            if (!el.details.checked) {
+                symbols.forEach(symbol => {
+                    delete symbol.boundingBox
+                    delete symbol.cornerPoints
+                })
+            }
+            el.result.innerText = JSON.stringify(symbols, null, 2)
         })
+}
+
+
+function detectImg() {
+    detectVideo(false)
+
+    if (el.video.srcObject) {
+        el.video.srcObject.getTracks().forEach(track => track.stop())
+        el.video.srcObject = null
     }
-    createDetector()
-    const constraints = {
-      audio: false,
-      video: {
-        width: 1500,
-        height: 1500,
-        facingMode: { exact: "environment" }
-      }
-    }
-    async function detector(repeat) {
-      if (!repeat) {
+
+    // FF needs some time to properly update decode()
+    setTimeout(() => el.img.decode().then(() => detect(el.img)), 100)
+}
+
+
+function detectVideo(repeat) {
+    if (!repeat) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-      }
+    }
 
-      if (typeof repeat === 'undefined') {
+    if (typeof repeat === 'undefined') {
         repeat = true
-      }
+    }
 
-      if (repeat) {
-        result1.innerText = Date.now()
-        
-        dectectVideo(video).then(rs=>{
-          requestId = requestAnimationFrame(() => detectVideo(true))
-          const nw=document.createElement('h2')
-          nw.innerText='hello world '+Date.now()
-        }).catch(error=>{result1.innerHTML=error})
+    if (repeat) {
+        detect(el.video)
+            .then(() => requestId = requestAnimationFrame(() => detectVideo(true)))
 
-      } else {
+    } else {
         cancelAnimationFrame(requestId)
         requestId = null
-      }
     }
-
-    (async () => {
-
-      const
-        img = document.getElementById('img'),
-        result = document.getElementById('result')
+}
 
 
+function onUrlActive() {
+    if (el.imgUrl.validity.valid) {
+        el.imgBtn.className = el.videoBtn.className = ''
+        el.imgUrl.className = 'active'
+
+        el.img.src = el.imgUrl.value
+        detectImg()
+    }
+}
 
 
+createDetector()
 
-      /*
-    
-  await img.decode()
-  canvas.width = img.naturalWidth
-  canvas.height = img.naturalHeight
-  context.drawImage(img, 0, 0)
+el.encoding.addEventListener('change', createDetector)
 
-  const
-    imageData = context.getImageData(0, 0, canvas.width, canvas.height),
-    symbols = await zbarWasm.scanImageData(imageData);
-  
-  symbols.forEach(s => s.rawData = s.decode())
-  result.innerText = JSON.stringify(symbols, null, 2)
-  */
+el.imgUrl.addEventListener('change', onUrlActive)
+el.imgUrl.addEventListener('focus', onUrlActive)
 
-      if (!requestId) {
-        await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-          video.srcObject = stream
-          detector()
-        }).catch(error => {
-          console.log(error)
-          result1.innerHTML = '<span style="color:red;">Error: </span>' + error
-        })
-      }
-      else {
-        detector(false)
-      }
-    })()
+
+el.fileInput.addEventListener('change', event => {
+    el.imgUrl.className = el.videoBtn.className = ''
+    el.imgBtn.className = 'button-primary'
+
+    el.img.src = URL.createObjectURL(el.fileInput.files[0])
+    el.fileInput.value = null
+    detectImg()
+})
+
+
+el.imgBtn.addEventListener('click', event => {
+    el.fileInput.dispatchEvent(new MouseEvent('click'))
+})
+
+
+el.videoBtn.addEventListener('click', event => {
+    if (!requestId) {
+        navigator.mediaDevices.getUserMedia({audio: false, video: {facingMode: 'environment'}})
+            .then(stream => {
+                el.imgUrl.className = el.imgBtn.className = ''
+                el.videoBtn.className = 'button-primary'
+
+                el.video.srcObject = stream
+                detectVideo()
+            })
+            .catch(error => {
+                el.result.innerText = JSON.stringify(error)
+            })
+
+    } else {
+        el.imgUrl.className = el.imgBtn.className = el.videoBtn.className = ''
+
+        detectVideo(false)
+    }
+})
+
   </script>
 </body>
 
