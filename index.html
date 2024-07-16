@@ -7,15 +7,21 @@
   <img style="display:none;" id="img" crossorigin="anonymous"
     src="https://raw.githubusercontent.com/undecaf/zbar-wasm/master/tests/img/qr_code.png">
   <video playsinline autoplay></video>
-  
+
   <pre id="result"></pre>
   <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.11.0/dist/index.js"></script>
   <script type="module">
-    let result1=document.getElementById('result1')
+    let result1 = document.getElementById('result1')
     let canvas = document.createElement('canvas')
     let ctx = canvas.getContext('2d')
     let video = document.querySelector("video")
-    let requestId=null
+    let requestId = null
+    let dectect = null
+    async function createDetector() {
+      supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
+      dectect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
+    }
+    createDetector()
     const constraints = {
       audio: false,
       video: {
@@ -24,63 +30,66 @@
         facingMode: { exact: "environment" }
       }
     }
-    function detector(repeat){
+    function detector(repeat) {
       if (!repeat) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-    }
+      }
 
-    if (typeof repeat === 'undefined') {
+      if (typeof repeat === 'undefined') {
         repeat = true
-    }
+      }
 
-    if (repeat) {
-        result1.innerText=Date.now()
-        //requestId=requestAnimationFrame(detector(true))
+      if (repeat) {
+        result1.innerText = Date.now()
+        detect.dectect(video).then(rs=>{
+          result1.innerHTML=rs
+        })
+        //requestId = requestAnimationFrame(detector(true))
 
-    } else {
+      } else {
         cancelAnimationFrame(requestId)
         requestId = null
+      }
     }
-}
 
-      (async () => {
-        
-        const
-          img = document.getElementById('img'),
-          result = document.getElementById('result')
-          
-          
-        
-        
-
-          /*
-        
-      await img.decode()
-      canvas.width = img.naturalWidth
-      canvas.height = img.naturalHeight
-      context.drawImage(img, 0, 0)
+    (async () => {
 
       const
-        imageData = context.getImageData(0, 0, canvas.width, canvas.height),
-        symbols = await zbarWasm.scanImageData(imageData);
-      
-      symbols.forEach(s => s.rawData = s.decode())
-      result.innerText = JSON.stringify(symbols, null, 2)
-      */
-      
-    if(!requestId){
-      await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+        img = document.getElementById('img'),
+        result = document.getElementById('result')
+
+
+
+
+
+      /*
+    
+  await img.decode()
+  canvas.width = img.naturalWidth
+  canvas.height = img.naturalHeight
+  context.drawImage(img, 0, 0)
+
+  const
+    imageData = context.getImageData(0, 0, canvas.width, canvas.height),
+    symbols = await zbarWasm.scanImageData(imageData);
+  
+  symbols.forEach(s => s.rawData = s.decode())
+  result.innerText = JSON.stringify(symbols, null, 2)
+  */
+
+      if (!requestId) {
+        await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
           detector()
-        }).catch(error=>{
+        }).catch(error => {
           console.log(error)
-          result1.innerHTML='<span style="color:red;">Error: </span>'+error
+          result1.innerHTML = '<span style="color:red;">Error: </span>' + error
         })
-    }
-        else{
-          detector(false)
-        }
-      })()
+      }
+      else {
+        detector(false)
+      }
+    })()
   </script>
 </body>
 
