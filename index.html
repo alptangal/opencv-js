@@ -31,7 +31,7 @@
         facingMode: { exact: "environment" }
       }
     }
-    function detector(repeat) {
+    async function detector(repeat) {
       if (!repeat) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
       }
@@ -42,10 +42,18 @@
 
       if (repeat) {
         result1.innerText = Date.now()
-        detect.detect(video).then(rs=>{
-          result1.innerHTML=rs
-        })
-        //requestId = requestAnimationFrame(detector(true))
+        await video.decode()
+        canvas.width = video.naturalWidth
+        canvas.height = video.naturalHeight
+        context.drawImage(video, 0, 0)
+
+        const
+          imageData = context.getImageData(0, 0, canvas.width, canvas.height),
+          symbols = await zbarWasm.scanImageData(imageData);
+        
+        symbols.forEach(s => s.rawData = s.decode())
+        result.innerText = JSON.stringify(symbols, null, 2)
+        requestId = requestAnimationFrame(detector(true))
 
       } else {
         cancelAnimationFrame(requestId)
