@@ -23,7 +23,7 @@ function detector(repeat){
     if (repeat) {
        now=Date.now()
        result1.innerText(now)
-       requestAnimationFrame(()=>detector(true))
+       //requestAnimationFrame(()=>detector(true))
 
     } else {
         cancelAnimationFrame(requestId)
