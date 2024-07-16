@@ -41,12 +41,10 @@
                 ctx.stroke()
             })
 
-            if (!el.details.checked) {
                 symbols.forEach(symbol => {
                     delete symbol.boundingBox
                     delete symbol.cornerPoints
                 })
-            }
             result1.innerText = JSON.stringify(symbols, null, 2)
         })
 }
