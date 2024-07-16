@@ -15,9 +15,10 @@
     let canvas = document.createElement('canvas')
     let ctx = canvas.getContext('2d')
     let video = document.querySelector("video")
-    let requestId=null
     function detector(repeat){
-
+      if (!repeat) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
 
     if (typeof repeat === 'undefined') {
         repeat = true
@@ -25,7 +26,7 @@
 
     if (repeat) {
         result1.innerText=Date.now()
-        requestId=requestAnimationFrame(detector(true))
+        requestAnimationFrame(detector(true))
 
     } else {
         //cancelAnimationFrame(requestId)
@@ -66,12 +67,12 @@
         facingMode: { exact: "environment" }
       }
     }
-
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
           detector()
         }).catch(error=>{
-          result1.innerText=JSON.stringify(error)
+          console.log(error)
+          result1.innerHTML='<span style="color:red;">Error: </span>'+error
         })
       })()
   </script>
