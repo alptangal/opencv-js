@@ -21,6 +21,7 @@
     async function createDetector() {
       supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
       detect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
+      result1.innerHTML='1111111'
     }
     function dectectVideo(source){
       return detect
