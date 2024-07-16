@@ -9,7 +9,26 @@
   <pre id="result"></pre>
   <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.11.0/dist/index.js"></script>
   <script type="module">
+    let result1=document.getElementById('result1')
+function detector(repeat){
+  if (!repeat) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
 
+    if (typeof repeat === 'undefined') {
+        repeat = true
+    }
+
+    if (repeat) {
+       now=new Date()
+       result1.innerText(now)
+       requestAnimationFrame(()=>detector(true))
+
+    } else {
+        cancelAnimationFrame(requestId)
+        requestId = null
+    }
+}
       (async () => {
         const
           img = document.getElementById('img'),
