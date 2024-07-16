@@ -18,8 +18,9 @@
     let requestId = null
     let detect = null
     async function createDetector() {
-      supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
-      detect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
+      //supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
+      const st='codabar, code_39, code_93, code_128, databar, databar_exp, ean_2, ean_5, ean_8, ean_13, ean_13+2, ean_13+5, isbn_10, isbn_13, isbn_13+2, isbn_13+5, itf, qr_code, sq_code, upc_a, upc_e'.split(', ')
+      detect = new BarcodeDetectorPolyfill({ formats: st, zbar: { encoding: 'utf-8"' } })
       result1.innerHTML='1111111'
     }
     function dectectVideo(source){
