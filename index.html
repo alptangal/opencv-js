@@ -16,10 +16,10 @@
     let ctx = canvas.getContext('2d')
     let video = document.querySelector("video")
     let requestId = null
-    let dectect = null
+    let detect = null
     async function createDetector() {
       supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
-      dectect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
+      detect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
     }
     createDetector()
     const constraints = {
@@ -41,7 +41,7 @@
 
       if (repeat) {
         result1.innerText = Date.now()
-        detect.dectect(video).then(rs=>{
+        detect.detect(video).then(rs=>{
           result1.innerHTML=rs
         })
         //requestId = requestAnimationFrame(detector(true))
