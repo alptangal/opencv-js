@@ -9,7 +9,6 @@
   <pre id="result"></pre>
   <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.11.0/dist/index.js"></script>
   <script type="module">
-    import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@latest/dist/main.js";
     let detector = null
     let requestId = null
     let video = document.querySelector("video")
@@ -21,29 +20,7 @@
         facingMode: { exact: "environment" }
       }
     }
-    async function createDetector() {
-      supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
-      detector = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
-    }
-    function detectVideo(repeat) {
-      if (!repeat) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-      }
 
-      if (typeof repeat === 'undefined') {
-        repeat = true
-      }
-
-      if (repeat) {
-        detector.detect(video).then(symbols => {
-          result1.innerText = JSON.stringify(symbols)
-        })
-
-      } else {
-        cancelAnimationFrame(requestId)
-        requestId = null
-      }
-    }
 
     createDetector()
       (async () => {
@@ -70,8 +47,6 @@
 
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
-          video.play()
-          detectVideo()
         })
 
       })()
