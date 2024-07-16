@@ -103,7 +103,7 @@
   */
 
       if (!requestId) {
-        await navigator.mediaDevices.getUserMedia(constraints.then(stream => {
+        await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
           detectVideo()
         }).catch(error => {
