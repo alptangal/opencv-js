@@ -26,7 +26,7 @@
       return detect
         .detect(source)
         .then(symbols => {
-          result1.innerHTML=symbols
+          result1.innerHTML=JSON.stringify(symbols)
         })
     }
     createDetector()
