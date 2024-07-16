@@ -11,13 +11,34 @@
   <pre id="result"></pre>
   <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.11.0/dist/index.js"></script>
   <script type="module">
+    let result1=document.getElementById('result1')
+    let canvas = document.createElement('canvas')
+    let ctx = canvas.getContext('2d')
+    let video = document.querySelector("video")
+    function detector(repeat){
+      if (!repeat) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+
+    if (typeof repeat === 'undefined') {
+        repeat = true
+    }
+
+    if (repeat) {
+        result1.innerText=Date.now()
+        requestAnimationFrame(detector(true))
+
+    } else {
+        //cancelAnimationFrame(requestId)
+        requestId = null
+    }
+}
 
       (async () => {
-        const result1=document.getElementById('result1')
-
+        
         const
           img = document.getElementById('img'),
-          result = document.getElementById('result'),
+          result = document.getElementById('result')
           
           
         
@@ -37,7 +58,7 @@
       symbols.forEach(s => s.rawData = s.decode())
       result.innerText = JSON.stringify(symbols, null, 2)
       */
-      const video = document.querySelector("video")
+      
     const constraints = {
       audio: false,
       video: {
@@ -49,11 +70,10 @@
 
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
-          //detector()
+          detector()
         }).catch(error=>{
           result1.innerText=JSON.stringify(error)
         })
-        //detector()
       })()
   </script>
 </body>
