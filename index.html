@@ -37,6 +37,7 @@ function detector(repeat){
           canvas = document.createElement('canvas'),
           context = canvas.getContext('2d');
 
+          /*
         
       await img.decode()
       canvas.width = img.naturalWidth
@@ -49,6 +50,7 @@ function detector(repeat){
       
       symbols.forEach(s => s.rawData = s.decode())
       result.innerText = JSON.stringify(symbols, null, 2)
+      */
       const video = document.querySelector("video")
     const constraints = {
       audio: false,
@@ -61,6 +63,7 @@ function detector(repeat){
 
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
+          detector()
         })
 
       })()
