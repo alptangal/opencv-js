@@ -28,10 +28,15 @@
       const video= document.querySelector("video");
       const constraints={
         audio:false,
-        video:true
+        video:{
+          width:300,
+          height:300,
+    facingMode: { exact: "environment" }
+  },
       }
       await navigator.mediaDevices.getUserMedia(constraints).then(stream=>{
         video.srcObject=stream
+        video.play()
       })
       
     })()
