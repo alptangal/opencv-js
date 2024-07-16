@@ -7,7 +7,7 @@
   <p id="result"></p>
   <img style="display:none;" id="img" crossorigin="anonymous"
     src="https://raw.githubusercontent.com/undecaf/zbar-wasm/master/tests/img/qr_code.png">
-  <video playsinline autoplay></video>
+    <video playsinline autoplay></video>
 
   <pre id="result"></pre>
   <script type="module">
@@ -27,6 +27,7 @@
     return detector
         .detect(source)
         .then(symbols => {
+          if(symbols.length>0){
             canvas.width = source.naturalWidth || source.videoWidth || source.width
             canvas.height = source.naturalHeight || source.videoHeight || source.height
             ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -46,6 +47,8 @@
                     delete symbol.cornerPoints
                 })
             result1.innerText = JSON.stringify(symbols, null, 2)
+          }
+            
         })
 }
 
@@ -53,7 +56,9 @@
     const constraints = {
       audio: false,
       video: {
-        facingMode: "environment" 
+        facingMode: "environment" ,
+        width:1500,
+        height:1500
       }
     }
     function detectVideo(repeat) {
@@ -101,7 +106,7 @@
   */
 
       if (!requestId) {
-        await navigator.mediaDevices.getUserMedia({audio: false, video: {facingMode: 'environment'}}).then(stream => {
+        await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
           detectVideo()
         }).catch(error => {
