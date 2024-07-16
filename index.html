@@ -65,7 +65,7 @@ function detector(repeat){
     }
 
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-          video.srcObject = stream
+          //video.srcObject = stream
           detector(true)
         })
 
