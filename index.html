@@ -9,10 +9,40 @@
   <script type="module">
 import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@latest/dist/main.js";
 let detector=null
+let requestId=null
+let video= document.querySelector("video");
+      const constraints={
+        audio:false,
+        video:{
+          width:1500,
+          height:1500,
+    facingMode: { exact: "environment" }
+  },
+      }
 async function createDetector() {
     supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
     detector = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
 }
+function detectVideo(repeat) {
+    if (!repeat) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+
+    if (typeof repeat === 'undefined') {
+        repeat = true
+    }
+
+    if (repeat) {
+      detector.detect(video).then(symbols=>{
+          result1.innerText=JSON.stringify(symbols)
+        })
+
+    } else {
+        cancelAnimationFrame(requestId)
+        requestId = null
+    }
+}
+
 createDetector()
     (async () => {
       const
@@ -33,21 +63,11 @@ createDetector()
       
       symbols.forEach(s => s.rawData = s.decode())
       result.innerText = JSON.stringify(symbols, null, 2)
-      const video= document.querySelector("video");
-      const constraints={
-        audio:false,
-        video:{
-          width:1500,
-          height:1500,
-    facingMode: { exact: "environment" }
-  },
-      }
+      
       await navigator.mediaDevices.getUserMedia(constraints).then(stream=>{
         video.srcObject=stream
         video.play()
-        detector.detect(video).then(symbols=>{
-          result1.innerText=JSON.stringify(symbols)
-        })
+        detectVideo()
       })
       
     })()
