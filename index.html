@@ -2,55 +2,14 @@
 <html>
 
 <body>
+  <h1>hello</h1>
   <img style="display:none;" id="img" crossorigin="anonymous"
     src="https://raw.githubusercontent.com/undecaf/zbar-wasm/master/tests/img/qr_code.png">
   <video playsinline autoplay></video>
   <pre id="result1"></pre>
   <pre id="result"></pre>
   <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.11.0/dist/index.js"></script>
-  <script type="module">
-    let detector = null
-    let requestId = null
-    
 
-
-    createDetector()
-      (async () => {
-        const
-          img = document.getElementById('img'),
-          result = document.getElementById('result'),
-          result1 = document.getElementById('result1'),
-          canvas = document.createElement('canvas'),
-          context = canvas.getContext('2d');
-
-        
-      await img.decode()
-      canvas.width = img.naturalWidth
-      canvas.height = img.naturalHeight
-      context.drawImage(img, 0, 0)
-
-      const
-        imageData = context.getImageData(0, 0, canvas.width, canvas.height),
-        symbols = await zbarWasm.scanImageData(imageData);
-      
-      symbols.forEach(s => s.rawData = s.decode())
-      result.innerText = JSON.stringify(symbols, null, 2)
-      const video = document.querySelector("video")
-    const constraints = {
-      audio: false,
-      video: {
-        width: 1500,
-        height: 1500,
-        facingMode: { exact: "environment" }
-      }
-    }
-
-        await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-          video.srcObject = stream
-        })
-
-      })()
-  </script>
 </body>
 
 </html>
