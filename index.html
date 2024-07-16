@@ -20,7 +20,7 @@ function detector(repeat){
     }
 
     if (repeat) {
-       now=new Date()
+       now=Date.now()
        result1.innerText(now)
        requestAnimationFrame(()=>detector(true))
 
