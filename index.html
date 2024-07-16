@@ -27,6 +27,7 @@
     return detector
         .detect(source)
         .then(symbols => {
+          result1.innerText=JSON.stringify(symbols)
             canvas.width = source.naturalWidth || source.videoWidth || source.width
             canvas.height = source.naturalHeight || source.videoHeight || source.height
             ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -67,7 +68,7 @@
 
     if (repeat) {
         detect(video)
-            .then(() => requestId = requestAnimationFrame(() => detectVideo(true)))
+            .then(() => requestId = requestAnimationFrame(() => detectVideo(true))).catch(err=>result.innerHTML=err)
 
     } else {
         cancelAnimationFrame(requestId)
