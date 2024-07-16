@@ -11,15 +11,7 @@
   <script type="module">
     let detector = null
     let requestId = null
-    let video = document.querySelector("video")
-    const constraints = {
-      audio: false,
-      video: {
-        width: 1500,
-        height: 1500,
-        facingMode: { exact: "environment" }
-      }
-    }
+    
 
 
     createDetector()
@@ -43,7 +35,15 @@
       
       symbols.forEach(s => s.rawData = s.decode())
       result.innerText = JSON.stringify(symbols, null, 2)
-      
+      const video = document.querySelector("video")
+    const constraints = {
+      audio: false,
+      video: {
+        width: 1500,
+        height: 1500,
+        facingMode: { exact: "environment" }
+      }
+    }
 
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
