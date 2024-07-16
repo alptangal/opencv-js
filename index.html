@@ -51,7 +51,7 @@
         result1.innerText = Date.now()
         
         dectectVideo(video).then(rs=>{
-          requestId = requestAnimationFrame(() => detectVideo(true))
+          requestId = requestAnimationFrame(() => detector(true))
           const nw=document.createElement('h2')
           nw.innerText='hello world '+Date.now()
         }).catch(error=>{result1.innerHTML=error})
