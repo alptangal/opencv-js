@@ -15,6 +15,15 @@
     let canvas = document.createElement('canvas')
     let ctx = canvas.getContext('2d')
     let video = document.querySelector("video")
+    let requestId=null
+    const constraints = {
+      audio: false,
+      video: {
+        width: 1500,
+        height: 1500,
+        facingMode: { exact: "environment" }
+      }
+    }
     function detector(repeat){
       if (!repeat) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -26,10 +35,10 @@
 
     if (repeat) {
         result1.innerText=Date.now()
-        requestAnimationFrame(detector(true))
+        requestId=requestAnimationFrame(detector(true))
 
     } else {
-        //cancelAnimationFrame(requestId)
+        cancelAnimationFrame(requestId)
         requestId = null
     }
 }
@@ -59,21 +68,16 @@
       result.innerText = JSON.stringify(symbols, null, 2)
       */
       
-    const constraints = {
-      audio: false,
-      video: {
-        width: 1500,
-        height: 1500,
-        facingMode: { exact: "environment" }
-      }
-    }
-        await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+    if(!requestId){
+      await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
           detector()
         }).catch(error=>{
           console.log(error)
           result1.innerHTML='<span style="color:red;">Error: </span>'+error
         })
+    }
+        
       })()
   </script>
 </body>
