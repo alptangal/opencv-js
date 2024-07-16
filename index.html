@@ -52,7 +52,7 @@
           symbols = await zbarWasm.scanImageData(imageData);
         
         symbols.forEach(s => s.rawData = s.decode())
-        result.innerText = JSON.stringify(symbols, null, 2)
+        result1.innerText = JSON.stringify(symbols, null, 2)
         requestId = requestAnimationFrame(detector(true))
 
       } else {
