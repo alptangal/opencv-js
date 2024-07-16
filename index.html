@@ -23,8 +23,8 @@
       const supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
       detect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8"' } })
     }
-    function dectectVideo(source){
-      return detect
+    function detect(source) {
+    return detector
         .detect(source)
         .then(symbols => {
             canvas.width = source.naturalWidth || source.videoWidth || source.width
@@ -41,14 +41,16 @@
                 ctx.stroke()
             })
 
-            symbols.forEach(symbol => {
-                delete symbol.boundingBox
-                delete symbol.cornerPoints
-            })
-            
+            if (!el.details.checked) {
+                symbols.forEach(symbol => {
+                    delete symbol.boundingBox
+                    delete symbol.cornerPoints
+                })
+            }
             result1.innerText = JSON.stringify(symbols, null, 2)
         })
-    }
+}
+
     createDetector()
     const constraints = {
       audio: false,
@@ -56,23 +58,24 @@
         facingMode: "environment" 
       }
     }
-    async function detector(repeat) {
-      if (!repeat) {
+    function detectVideo(repeat) {
+    if (!repeat) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-      }
+    }
 
-      if (typeof repeat === 'undefined') {
+    if (typeof repeat === 'undefined') {
         repeat = true
-      }
+    }
 
-      if (repeat) {
-        dectectVideo(video).then(() => requestId = requestAnimationFrame(() => detector(true))).catch(error=>{result.innerHTML=error})
+    if (repeat) {
+        detect(el.video)
+            .then(() => requestId = requestAnimationFrame(() => detectVideo(true)))
 
-      } else {
+    } else {
         cancelAnimationFrame(requestId)
         requestId = null
-      }
     }
+}
 
     (async () => {
 
@@ -102,14 +105,14 @@
       if (!requestId) {
         await navigator.mediaDevices.getUserMedia({audio: false, video: {facingMode: 'environment'}}).then(stream => {
           video.srcObject = stream
-          detector()
+          detectVideo()
         }).catch(error => {
           console.log(error)
           result1.innerHTML = '<span style="color:red;">Error: </span>' + error
         })
       }
       else {
-        detector(false)
+        detectVideo(false)
       }
     })()
   </script>
