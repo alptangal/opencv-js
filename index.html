@@ -18,10 +18,10 @@
     let ctx = canvas.getContext('2d')
     let video = document.querySelector("video")
     let requestId = null
-    let detect = null
+    let detector = null
     async function createDetector() {
       const supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
-      detect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8"' } })
+      detector = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8"' } })
     }
     function detect(source) {
     return detector
