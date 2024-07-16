@@ -14,9 +14,7 @@
     let result1=document.getElementById('result1')
 function detector(repeat){
   result1.innerText(String(typeof repeat))
-  if (!repeat) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-    }
+
 
     if (typeof repeat === 'undefined') {
         repeat = true
@@ -65,7 +63,7 @@ function detector(repeat){
     }
 
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-          //video.srcObject = stream
+          video.srcObject = stream
           detector(true)
         })
 
