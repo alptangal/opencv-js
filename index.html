@@ -3,10 +3,11 @@
 
 <body>
   <h1>hello world</h1>
+  <p id="result1"></p>
   <img style="display:none;" id="img" crossorigin="anonymous"
     src="https://raw.githubusercontent.com/undecaf/zbar-wasm/master/tests/img/qr_code.png">
   <video playsinline autoplay></video>
-  <pre id="result1"></pre>
+  
   <pre id="result"></pre>
   <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.11.0/dist/index.js"></script>
   <script type="module">
@@ -65,6 +66,7 @@ function detector(repeat){
 
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
+          result1.innerText='hello world'
           detector()
         })
 
