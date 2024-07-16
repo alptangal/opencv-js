@@ -52,7 +52,9 @@
         
         dectectVideo(video).then(rs=>{
           requestId = requestAnimationFrame(() => detectVideo(true))
-        })
+          const nw=document.createElement('h2')
+          nw.innerText='hello world '+Date.now()
+        }).catch(error=>{result1.innerHTML=error})
 
       } else {
         cancelAnimationFrame(requestId)
