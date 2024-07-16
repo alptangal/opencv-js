@@ -42,17 +42,11 @@
 
       if (repeat) {
         result1.innerText = Date.now()
-        await video.decode()
-        canvas.width = video.naturalWidth
-        canvas.height = video.naturalHeight
-        context.drawImage(video, 0, 0)
-
-        const
-          imageData = context.getImageData(0, 0, canvas.width, canvas.height),
-          symbols = await zbarWasm.scanImageData(imageData);
-        
-        symbols.forEach(s => s.rawData = s.decode())
-        result1.innerText = JSON.stringify(symbols, null, 2)
+        detect.detect(video).then(rs=>{
+          result1.innerHTML=rs
+        }).catch(error=>{
+          result1.innerHTML=error
+        })
         requestId = requestAnimationFrame(detector(true))
 
       } else {
