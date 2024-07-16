@@ -15,20 +15,6 @@
 function detector(repeat){
   result1.innerText('hello world 1')
 
-
-    if (typeof repeat === 'undefined') {
-        repeat = true
-    }
-
-    if (repeat) {
-       now=Date.now()
-       result1.innerText(now)
-       //requestAnimationFrame(()=>detector(true))
-
-    } else {
-        cancelAnimationFrame(requestId)
-        requestId = null
-    }
 }
       (async () => {
         const
