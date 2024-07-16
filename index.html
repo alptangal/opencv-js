@@ -27,7 +27,6 @@
     return detector
         .detect(source)
         .then(symbols => {
-          if(symbols.length>0){
             canvas.width = source.naturalWidth || source.videoWidth || source.width
             canvas.height = source.naturalHeight || source.videoHeight || source.height
             ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -47,7 +46,7 @@
                     delete symbol.cornerPoints
                 })
             result1.innerText = JSON.stringify(symbols, null, 2)
-          }
+
             
         })
 }
