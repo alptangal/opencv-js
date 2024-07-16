@@ -15,7 +15,7 @@
     import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@latest/dist/main.js";
     let result1 = document.getElementById('result1')
     let result = document.getElementById('result')
-    let canvas = document.getElementById('canvas')
+    let canvas = document.createElement('canvas')
     let ctx = canvas.getContext('2d')
     let video = document.querySelector("video")
     let requestId = null
