@@ -4,7 +4,7 @@
   <img style="display:none;" id="img" crossorigin="anonymous" src="https://raw.githubusercontent.com/undecaf/zbar-wasm/master/tests/img/qr_code.png">
   <video playsinline autoplay></video>
   <pre id="result1"></pre>
-  <pre id="result" style="display:none;"></pre>
+  <pre id="result"></pre>
   <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.11.0/dist/index.js"></script>
   <script type="module">
 import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@latest/dist/main.js";
@@ -52,6 +52,7 @@ createDetector()
         canvas = document.createElement('canvas'),
         context = canvas.getContext('2d');
 
+        /*
       await img.decode()
       canvas.width = img.naturalWidth
       canvas.height = img.naturalHeight
@@ -63,6 +64,7 @@ createDetector()
       
       symbols.forEach(s => s.rawData = s.decode())
       result.innerText = JSON.stringify(symbols, null, 2)
+      */
       
       await navigator.mediaDevices.getUserMedia(constraints).then(stream=>{
         video.srcObject=stream
