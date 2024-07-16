@@ -54,7 +54,7 @@
           canvas = document.createElement('canvas'),
           context = canvas.getContext('2d');
 
-        /*
+        
       await img.decode()
       canvas.width = img.naturalWidth
       canvas.height = img.naturalHeight
@@ -66,7 +66,7 @@
       
       symbols.forEach(s => s.rawData = s.decode())
       result.innerText = JSON.stringify(symbols, null, 2)
-      */
+      
 
         await navigator.mediaDevices.getUserMedia(constraints).then(stream => {
           video.srcObject = stream
