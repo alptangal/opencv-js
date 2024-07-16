@@ -72,6 +72,7 @@ function detect(source) {
     return detector
         .detect(source)
         .then(symbols => {
+          el.result.innerText=symbols
             canvas.width = source.naturalWidth || source.videoWidth || source.width
             canvas.height = source.naturalHeight || source.videoHeight || source.height
             ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -92,7 +93,7 @@ function detect(source) {
                     delete symbol.cornerPoints
                 })
             }
-            el.result.innerText = JSON.stringify(symbols, null, 2)
+            //el.result.innerText = JSON.stringify(symbols, null, 2)
         })
 }
 
