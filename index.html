@@ -23,7 +23,7 @@
       detect = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
     }
     function dectectVideo(){
-      return detector
+      return detect
         .detect(source)
         .then(symbols => {
           result1.innerHTML=symbols
