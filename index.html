@@ -21,7 +21,7 @@
     let detector = null
     async function createDetector() {
       const supportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats()
-      detector = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8"' } })
+      detector = new BarcodeDetectorPolyfill({ formats: supportedFormats, zbar: { encoding: 'utf-8' } })
     }
     function detect(source) {
     return detector
@@ -68,7 +68,7 @@
 
     if (repeat) {
         detect(video)
-            .then(() => requestId = requestAnimationFrame(() => detectVideo(true))).catch(err=>result.innerHTML=err)
+            .then(() => requestId = requestAnimationFrame(() => detectVideo(true))).catch(err=>result.innerHTML=er)
 
     } else {
         cancelAnimationFrame(requestId)
